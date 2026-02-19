@@ -1,0 +1,41 @@
+---
+description: Project conventions for ai-budget-backend
+alwaysApply: true
+---
+
+# ai-budget-backend
+
+### 1. NO EXTRA ROUTES
+
+- Do NOT create validation, test, check, or config routes
+- Only create routes that directly serve the application purpose
+- Keep API endpoints minimal and functional
+- Avoid over-engineering for a small project
+
+### 2. COMPACT & ACCURATE CODE
+
+- Write small, focused functions
+- Avoid unnecessary abstractions
+- Keep code simple and readable
+- Don't create extra layers unless absolutely necessary
+- Prefer inline solutions over separate utilities
+
+### 3. TYPESCRIPT: USE TYPES NOT INTERFACES
+
+- Use `type` instead of `interface` for all type definitions
+- Keep type definitions minimal and essential
+- Avoid creating types for simple objects or primitives
+- Only create types when they provide real value
+
+### 4. TYPE ORGANIZATION
+
+- Move all types to `types/` folder
+- Keep types close to their usage context
+
+### 5. TYPESCRIPT TYPES
+
+- Do not use type ANY;
+
+### 6. README.md
+
+- Keep all info about start/setup project in it. Add to it env example without variables.
