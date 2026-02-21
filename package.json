@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
@@ -20,18 +20,20 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Oldu8/ai-budget-backend/issues"
   },
   "homepage": "https://github.com/Oldu8/ai-budget-backend#readme",
   "dependencies": {
     "dotenv": "^17.3.1",
-    "fastify": "^5.7.4"
+    "drizzle-orm": "^0.45.1",
+    "fastify": "^5.7.4",
+    "postgres": "^3.4.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "@types/node": "^25.3.0",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^10.0.0",
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",
