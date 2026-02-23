@@ -8,5 +8,8 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: { project: "./tsconfig.json" },
     },
-  }
+  },
+  {
+    ignores: ["drizzle.config.ts", "eslint.config.mjs"],
+  },
 );
