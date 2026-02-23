@@ -45,3 +45,7 @@ alwaysApply: true
 - For migration and DB changes use only:
   drizzle-kit generate
   drizzle-kit migrate
+
+### 8. General
+
+- Always refer to backend-spec.md for the database schema, table naming conventions, and business logic before generating any backend code.
