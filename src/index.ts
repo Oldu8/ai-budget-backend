@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { users } from "./db/schema";
+import { users } from "@/db/schema";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {

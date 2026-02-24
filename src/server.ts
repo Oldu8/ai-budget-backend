@@ -1,12 +1,15 @@
 import Fastify from "fastify";
 import dotenv from "dotenv";
-import { sql } from "./db/client";
+import { sql } from "@/db/client";
+import { testAiRoute } from "@/routes/test-ai";
 
 dotenv.config();
 
 const app = Fastify({
   logger: true,
 });
+
+app.register(testAiRoute);
 
 app.get("/health", async (_, reply) => {
   const timestamp = new Date().toISOString();
