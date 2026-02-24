@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Oldu8/ai-budget-backend#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.97.0",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
     "fastify": "^5.7.4",
