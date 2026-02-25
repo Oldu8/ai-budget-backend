@@ -1,14 +1,11 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { and, eq, isNull } from "drizzle-orm";
+import { db } from "@/db/client";
+import { users } from "@/db/schema";
 import { supabaseServer } from "@/supabase";
 import { AuthenticatedUser } from "@/types/auth";
 
-/**
- * Auth middleware: reads JWT from Authorization: Bearer <token>,
- * validates via Supabase, sets request.user.
- * Use only on protected routes (preHandler: app.authenticate), not globally —
- * public routes (health, webhooks) must work without a token.
- */
-async function authMiddleware(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+async function authenticate(request: FastifyRequest, reply: FastifyReply): Promise<void> {
   try {
     const authHeader = request.headers.authorization;
 
@@ -24,9 +21,35 @@ async function authMiddleware(request: FastifyRequest, reply: FastifyReply): Pro
       return reply.status(401).send({ error: "Invalid token" });
     }
 
+    const [row] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        emailConfirmed: users.emailConfirmed,
+      })
+      .from(users)
+      .where(and(eq(users.supabaseUserId, data.user.id), isNull(users.deletedAt)))
+      .limit(1);
+
+    if (!row) {
+      return reply.status(401).send({ error: "User profile not found" });
+    }
+
+    if (!row.emailConfirmed) {
+      return reply.status(403).send({
+        error: "Email not confirmed. Check your inbox to confirm your account.",
+        code: "EMAIL_NOT_CONFIRMED",
+      });
+    }
+
     const user: AuthenticatedUser = {
-      id: data.user.id,
-      email: data.user.email ?? undefined,
+      id: row.id,
+      supabaseId: data.user.id,
+      email: row.email,
+      firstName: row.firstName,
+      lastName: row.lastName,
     };
 
     request.user = user;
@@ -37,5 +60,5 @@ async function authMiddleware(request: FastifyRequest, reply: FastifyReply): Pro
 }
 
 export async function authPlugin(app: FastifyInstance) {
-  app.decorate("authenticate", authMiddleware);
+  app.decorate("authenticate", authenticate);
 }

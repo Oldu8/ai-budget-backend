@@ -8,6 +8,13 @@
       "when": 1771876463451,
       "tag": "0000_bright_iceman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772052745244,
+      "tag": "0001_wide_polaris",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,7 @@
 export type AuthenticatedUser = {
-  id: string;
-  email?: string;
+  id: number;
+  supabaseId: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
 };

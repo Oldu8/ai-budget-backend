@@ -22,11 +22,13 @@ export const planTypeEnum = pgEnum("plan_type", ["free", "basic", "standard", "p
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
+  supabaseUserId: text("supabase_user_id").notNull().unique(),
   email: text("email").notNull().unique(),
-  firstName: text("first_name").notNull(),
-  lastName: text("last_name").notNull(),
-  password: text("password").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  emailConfirmed: boolean("email_confirmed").default(false).notNull(),
   paymentCustomerId: text("payment_customer_id"),
+  deletedAt: timestamp("deleted_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -36,7 +38,7 @@ export const userSettings = pgTable("user_settings", {
   id: serial("id").primaryKey(),
   userId: integer("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   currency: text("currency").notNull(),
   language: text("language").notNull(),
   timezone: text("timezone").notNull(),
