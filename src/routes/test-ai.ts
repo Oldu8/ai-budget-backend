@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify";
 import { openai } from "@/services/openai";
 
 export async function testAiRoute(app: FastifyInstance) {
-  app.get("/test-ai", async () => {
+  app.get("/test-ai", { preHandler: [app.authenticate] }, async () => {
     try {
       const response = await openai.responses.create({
         model: "gpt-4o-mini",

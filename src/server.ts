@@ -11,6 +11,7 @@ const app = Fastify({
 app.register(authPlugin);
 app.register(testAiRoute);
 
+// Public route — no auth
 app.get("/health", async (_, reply) => {
   const timestamp = new Date().toISOString();
 
