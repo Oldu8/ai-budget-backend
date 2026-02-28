@@ -15,6 +15,13 @@
       "when": 1772052745244,
       "tag": "0001_wide_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772274888721,
+      "tag": "0002_fine_red_skull",
+      "breakpoints": true
     }
   ]
 }

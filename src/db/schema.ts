@@ -10,12 +10,12 @@ import {
   date,
   jsonb,
   primaryKey,
+  unique,
+  index,
 } from "drizzle-orm/pg-core";
 
+export const transactionCreatedByEnum = pgEnum("transaction_created_by", ["user", "ai"]);
 export const transactionTypeEnum = pgEnum("transaction_type", ["income", "expense"]);
-
-export const messageStatusEnum = pgEnum("message_status", ["pending", "processed", "error"]);
-
 export const planTypeEnum = pgEnum("plan_type", ["free", "basic", "standard", "premium"]);
 
 // ── 1. Users ──
@@ -34,15 +34,21 @@ export const users = pgTable("users", {
 
 // ── 2. User Settings ──
 
-export const userSettings = pgTable("user_settings", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  currency: text("currency").notNull(),
-  language: text("language").notNull(),
-  timezone: text("timezone").notNull(),
-});
+export const userSettings = pgTable(
+  "user_settings",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    currency: text("currency").notNull(),
+    language: text("language").notNull(),
+    timezone: text("timezone").notNull(),
+  },
+  (t) => ({
+    userUnique: unique().on(t.userId),
+  })
+);
 
 // ── 3. Statuses (lookup table for payments & subscriptions) ──
 
@@ -78,60 +84,55 @@ export const userCategorySettings = pgTable(
   (t) => [primaryKey({ columns: [t.userId, t.categoryId] })]
 );
 
-// ── 6. Chats ──
+// ── 7. Transactions ──
 
-export const chats = pgTable("chats", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-});
-
-// ── 7. Messages ──
-
-export const messages = pgTable("messages", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-  text: text("text"),
-  imgPath: text("img_path"),
-  chatId: integer("chat_id")
-    .notNull()
-    .references(() => chats.id),
-  status: messageStatusEnum("status").notNull().default("pending"),
-});
-
-// ── 8. Transactions ──
-
-export const transactions = pgTable("transactions", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-  categoryId: integer("category_id")
-    .notNull()
-    .references(() => categories.id),
-  amount: integer("amount").notNull(),
-  date: date("date").notNull(),
-  messageId: integer("message_id").references(() => messages.id),
-  type: transactionTypeEnum("type").notNull(),
-  rawAiData: jsonb("raw_ai_data"),
-  deletedAt: timestamp("deleted_at"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+export const transactions = pgTable(
+  "transactions",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id),
+    categoryId: integer("category_id")
+      .notNull()
+      .references(() => categories.id),
+    amount: integer("amount").notNull(),
+    date: date("date").notNull(),
+    type: transactionTypeEnum("type").notNull(),
+    createdBy: transactionCreatedByEnum("created_by").notNull(),
+    rawAiData: jsonb("raw_ai_data"),
+    confirmedAt: timestamp("confirmed_at"),
+    imgPath: text("img_path"),
+    deletedAt: timestamp("deleted_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => ({
+    userDateIdx: index("transactions_user_date_idx").on(t.userId, t.date),
+    userCategoryDateIdx: index("transactions_user_category_date_idx").on(
+      t.userId,
+      t.categoryId,
+      t.date
+    ),
+  })
+);
 
 // ── 9. Plans ──
 
-export const plans = pgTable("plans", {
-  id: serial("id").primaryKey(),
-  type: planTypeEnum("type").notNull(),
-  paymentPriceId: text("payment_price_id").notNull(),
-  price: integer("price").notNull(),
-  label: text("label").notNull(),
-  description: text("description"),
-  checkLimit: integer("check_limit").notNull(),
-});
+export const plans = pgTable(
+  "plans",
+  {
+    id: serial("id").primaryKey(),
+    type: planTypeEnum("type").notNull(),
+    paymentPriceId: text("payment_price_id").notNull(),
+    price: integer("price").notNull(),
+    label: text("label").notNull(),
+    description: text("description"),
+    checkLimit: integer("check_limit").notNull(),
+  },
+  (t) => ({
+    typeUnique: unique().on(t.type),
+  })
+);
 
 // ── 10. User Subscriptions ──
 
