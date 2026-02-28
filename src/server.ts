@@ -4,6 +4,7 @@ import { sql } from "@/db/client";
 import { authPlugin } from "@/services/auth";
 import { authRoutes } from "@/routes/auth";
 import { userRoutes } from "@/routes/users";
+import { userSettingsRoutes } from "@/routes/user-settings";
 import { testAiRoute } from "@/routes/test-ai";
 
 const app = Fastify({
@@ -13,6 +14,7 @@ const app = Fastify({
 app.register(authPlugin);
 app.register(authRoutes);
 app.register(userRoutes);
+app.register(userSettingsRoutes);
 app.register(testAiRoute);
 
 app.get("/health", async (_, reply) => {
