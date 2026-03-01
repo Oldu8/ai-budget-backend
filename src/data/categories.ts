@@ -2,6 +2,7 @@ export type CategorySeed = {
   key: string; // пойдёт в categories.name
   parentKey?: string | null; // для иерархии
   visibilityTag?: string | null;
+  subcategories?: CategorySeed[];
   label: string; // пойдёт в categories.label
 };
 
@@ -11,85 +12,90 @@ export const categoriesSeed: CategorySeed[] = [
     parentKey: null,
     visibilityTag: null,
     label: "Groceries and household",
-  },
-  {
-    key: "home_food",
-    parentKey: "home",
-    visibilityTag: null,
-    label: "Groceries",
-  },
-  {
-    key: "home_snacks",
-    parentKey: "home",
-    visibilityTag: null,
-    label: "Sweets and snacks",
-  },
-  {
-    key: "home_drinks",
-    parentKey: "home",
-    visibilityTag: null,
-    label: "Drinks",
-  },
-  {
-    key: "home_household_chemicals",
-    parentKey: "home",
-    visibilityTag: null,
-    label: "Household chemicals",
-  },
-  {
-    key: "home_personal_hygiene",
-    parentKey: "home",
-    visibilityTag: null,
-    label: "Personal hygiene",
-  },
-  {
-    key: "home_cosmetics",
-    parentKey: "home",
-    visibilityTag: null,
-    label: "Cosmetics",
-  },
-  {
-    key: "home_other",
-    parentKey: "home",
-    visibilityTag: null,
-    label: "Other (home)",
+    subcategories: [
+      {
+        key: "home_food",
+        parentKey: "home",
+        visibilityTag: null,
+        label: "Groceries",
+      },
+      {
+        key: "home_snacks",
+        parentKey: "home",
+        visibilityTag: null,
+        label: "Sweets and snacks",
+      },
+      {
+        key: "home_drinks",
+        parentKey: "home",
+        visibilityTag: null,
+        label: "Drinks",
+      },
+      {
+        key: "home_household_chemicals",
+        parentKey: "home",
+        visibilityTag: null,
+        label: "Household chemicals",
+      },
+      {
+        key: "home_personal_hygiene",
+        parentKey: "home",
+        visibilityTag: null,
+        label: "Personal hygiene",
+      },
+      {
+        key: "home_cosmetics",
+        parentKey: "home",
+        visibilityTag: null,
+        label: "Cosmetics",
+      },
+      {
+        key: "home_other",
+        parentKey: "home",
+        visibilityTag: null,
+        label: "Other (home)",
+      },
+    ],
   },
   {
     key: "kids",
     parentKey: null,
     visibilityTag: "kids",
     label: "Kids",
+    subcategories: [
+      {
+        key: "kids_clothes",
+        parentKey: "kids",
+        visibilityTag: "kids",
+        label: "Kids' clothes",
+      },
+      {
+        key: "kids_toys",
+        parentKey: "kids",
+        visibilityTag: "kids",
+        label: "Toys and kids' goods",
+      },
+      {
+        key: "kids_food",
+        parentKey: "kids",
+        visibilityTag: "kids",
+        label: "Baby food and formula",
+      },
+      {
+        key: "kids_care",
+        parentKey: "kids",
+        visibilityTag: "kids",
+        label: "Baby care and hygiene",
+      },
+      {
+        key: "kids_other",
+        parentKey: "kids",
+        visibilityTag: "kids",
+        label: "Other (kids)",
+      },
+    ],
   },
-  {
-    key: "kids_clothes",
-    parentKey: "kids",
-    visibilityTag: "kids",
-    label: "Kids' clothes",
-  },
-  {
-    key: "kids_toys",
-    parentKey: "kids",
-    visibilityTag: "kids",
-    label: "Toys and kids' goods",
-  },
-  {
-    key: "kids_food",
-    parentKey: "kids",
-    visibilityTag: "kids",
-    label: "Baby food and formula",
-  },
-  {
-    key: "kids_care",
-    parentKey: "kids",
-    visibilityTag: "kids",
-    label: "Baby care and hygiene",
-  },
-  {
-    key: "kids_other",
-    parentKey: "kids",
-    visibilityTag: "kids",
-    label: "Other (kids)",
-  },
+
   {
     key: "transport",
     parentKey: null,
@@ -123,19 +129,19 @@ export const categoriesSeed: CategorySeed[] = [
   {
     key: "transport_fuel",
     parentKey: "transport",
-    visibilityTag: null,
+    visibilityTag: "car",
     label: "Fuel",
   },
   {
     key: "transport_parking",
     parentKey: "transport",
-    visibilityTag: null,
+    visibilityTag: "car",
     label: "Parking",
   },
   {
     key: "transport_car_service",
     parentKey: "transport",
-    visibilityTag: null,
+    visibilityTag: "car",
     label: "Car maintenance",
   },
   {
